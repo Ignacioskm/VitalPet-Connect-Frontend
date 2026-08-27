@@ -1,0 +1,201 @@
+/* estilos del panel de administracion
+   van despues de bootstrap, no lo reemplazan */
+
+/* variables de color para no andar repitiendo los codigos */
+:root {
+  --vp-verde: #2a9d8f;
+  --vp-verde-oscuro: #21867a;
+  --vp-azul: #264653;
+  --vp-amarillo: #e9c46a;
+  --vp-rojo: #e76f51;
+  --vp-fondo: #f4f6f8;
+  --vp-borde: #e3e7ea;
+}
+
+body {
+  background-color: var(--vp-fondo);
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #333;
+}
+
+/* menu lateral */
+.vp-sidebar {
+  background-color: var(--vp-azul);
+  width: 240px;
+  min-height: 100vh;
+  padding: 20px 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.vp-sidebar .vp-logo {
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  margin-bottom: 25px;
+  text-decoration: none;
+}
+
+.vp-sidebar .vp-logo span {
+  color: var(--vp-amarillo);
+}
+
+.vp-sidebar a.vp-link {
+  color: #cfd8dc;
+  display: block;
+  padding: 10px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+
+.vp-sidebar a.vp-link:hover {
+  background-color: var(--vp-verde-oscuro);
+  color: #fff;
+}
+
+/* la clase activo va en el link de la pagina donde estoy parado */
+.vp-sidebar a.vp-link.activo {
+  background-color: var(--vp-verde);
+  color: #fff;
+  font-weight: bold;
+}
+
+.vp-sidebar hr {
+  border-color: #3d5f6d;
+}
+
+/* contenido */
+.vp-contenido {
+  margin-left: 240px;
+  padding: 25px 30px;
+}
+
+.vp-titulo {
+  color: var(--vp-azul);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.vp-subtitulo {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+/* tarjetas del resumen */
+.vp-tarjeta {
+  background-color: #fff;
+  border: 1px solid var(--vp-borde);
+  border-radius: 10px;
+  padding: 18px;
+  height: 100%;
+}
+
+.vp-tarjeta .vp-numero {
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--vp-azul);
+  margin: 0;
+}
+
+.vp-tarjeta .vp-etiqueta {
+  font-size: 13px;
+  color: #6c757d;
+  text-transform: uppercase;
+}
+
+/* el circulito con el icono */
+.vp-icono {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+  background-color: var(--vp-verde);
+}
+
+.vp-icono.amarillo { background-color: var(--vp-amarillo); }
+.vp-icono.rojo     { background-color: var(--vp-rojo); }
+.vp-icono.azul     { background-color: var(--vp-azul); }
+
+/* cajas blancas de las tablas y los formularios */
+.vp-caja {
+  background-color: #fff;
+  border: 1px solid var(--vp-borde);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 22px;
+}
+
+.vp-caja h5 {
+  color: var(--vp-azul);
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.vp-tabla thead th {
+  background-color: var(--vp-azul);
+  color: #fff;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.vp-tabla tbody tr:hover {
+  background-color: #eef7f6;
+}
+
+/* boton propio */
+.btn-vp {
+  background-color: var(--vp-verde);
+  color: #fff;
+  border: none;
+}
+
+.btn-vp:hover {
+  background-color: var(--vp-verde-oscuro);
+  color: #fff;
+}
+
+/* mensajes de error de los formularios */
+.vp-error {
+  color: var(--vp-rojo);
+  font-size: 13px;
+  display: block;
+  margin-top: 4px;
+  min-height: 18px;
+}
+
+.vp-ayuda {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+/* borde rojo o verde segun la validacion */
+input.campo-malo, select.campo-malo, textarea.campo-malo {
+  border-color: var(--vp-rojo);
+}
+
+input.campo-bueno, select.campo-bueno, textarea.campo-bueno {
+  border-color: var(--vp-verde);
+}
+
+/* en pantallas chicas el menu se va arriba */
+@media (max-width: 768px) {
+  .vp-sidebar {
+    position: static;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .vp-contenido {
+    margin-left: 0;
+    padding: 18px;
+  }
+}

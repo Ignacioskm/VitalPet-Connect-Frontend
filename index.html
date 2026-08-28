@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Bienvenido a VitalPet-Connect </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+        <div class="container">
+            <!-- Icono hay que ver q ponemos aqui desps-->
+            <a href="index.html" class="navbar-brand d-flex align-items-center gap-2 text-primary fw-bold">
+                <i class="bi bi-heart-pulse-fill fs-4"></i>
+                VitalPet Connect
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            
+            <div class="collapse navbar-collapse " id ="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active fw-bold text-primary" aria-current="page">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-secondary">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="login.html" class="nav-link text-secondary">Login</a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <!--Aca va el boton del modal, que aun no se como carajos hacerlo-->
+                    <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal" data-bs-target="#appointmentModal">
+                        Tomar Cita
+                    </button>
+                    <!-- Boton user que este lo hago altoque-->
+                    <button class="btn btn-primary px-3" type="button">
+                        <i class="bi bi-person-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <header class="hero-section position-relative d-flex align-items-center">
+        <!-- El z1 es necesario para que el texto del difuminado quede por arriba de la imagen y quede bacan-->
+        <div class="container position-relative z-1">
+            <div class="row">
+                <div class="col-lg-6 col-md-8 py-5 my-5">
+                    <h1 class="display-4 fw-bold text-dark mb-3">
+                        CUIDAMOS DE QUIENES TE ACOMPAÑAN SIEMPRE
+                    </h1>
+                    <p class="lead text-secondary mb-4">
+                        En nuestra clinica veterinaria ofrecemos atención profesional y personalizada para la salud y bienestar de tu mascota.
+                    </p>
+                    <button class="btn btn-primary btn-lg px-4 fw-medium shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#appointmentModal">
+                        Agendar Cita <i class="bi bi-calendar-event ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="py-5 bg-white">
+        <div class="container py-4">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8 text-center">
+                    <h2 class="fw-bold text-dark mb-3">Cómo funciona VitalPet Connect</h2>
+                    <p class="text-secondary">
+                        Descubre cómo funciona nuestra clínica veterinaria y los increibles espacios que tenemos para tu mejor amigo.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                        <div class="ratio ratio-16x9">
+                            <!-- Me robe un video de yt-->
+                            <iframe 
+                                src="https://www.youtube.com/embed/WgSZEW7ra30?si=WdHMlnqze9YVHtOF"
+                                title="Demostración VitalPet Connect" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-light pt-5 pb-4 border-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <div class="d-flex align-items-center gap-2 text-primary fw-bold mb-3">
+                        <i class="bi bi-heart-pulse-fill fs-5"></i>
+                        <span>VitalPet Connect</span>
+                    </div>
+                    <p class="text-secondary small pe-lg-4">
+                        Brindando excelencia en atención clínica y cuidado compasivo para tus mascotas.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <h6 class="text-primary fw-bold mb-3"> CONTACTO</h6>
+                    <ul class="list-unstyled text-secondary small">
+                        <li class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> Av. Libertad 123, Viña del Mar</li>
+                        <li class="mb-2"><i class="bi bi-telephone-fill me-2"></i> +56 9 1234 5678</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill me-2"></i> contacto@vitalpet.cl</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="text-primary fw-bold mb-3">SÍGUENOS</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-secondary fs-5 text-decoration-none custom-hover"><i class="bi bi-globe"></i></a>
+                        <a href="#" class="text-secondary fs-5 text-decoration-none custom-hover"><i class="bi bi-share"></i></a>
+                        <a href="#" class="text-secondary fs-5 text-decoration-none custom-hover"><i class="bi bi-hand-thumbs-up"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12 text-center border-top pt-4">
+                    <p class="text-secondary small mb-0">
+                        © 2026 VitalPet Connect. Todos los derechos reservados. Servicios Veterinarios Profesionales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <!-- Cabecera del Modal -->
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h1 class="modal-title fs-4 fw-bold text-dark" id="appointmentModalLabel">Agendar Nueva Cita</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-secondary small mb-4">Ingresa los datos de tu mascota para solicitar una hora de atención.</p>
+                    <form id="appointmentForm">
+                        <div class="mb-3">
+                            <label for="petName" class="form-label fw-medium small">Nombre de la Mascota</label>
+                            <input type="text" class="form-control" id="petName" placeholder="Ej: Nala">
+                            <span class="text-danger small" id="errorPetName"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ownerName" class="form-label fw-medium small">Tu Nombre</label>
+                            <input type="text" class="form-control" id="ownerName" placeholder="Ej: Ignacio">
+                            <span class="text-danger small" id="errorOwnerName"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="appointmentReason" class="form-label fw-medium small">Motivo de la Consulta</label>
+                            <select class="form-select" id="appointmentReason">
+                                <option value="" selected>Selecciona un motivo...</option>
+                                <option value="vacuna">Vacunación Anual</option>
+                                <option value="control">Control Sano</option>
+                                <option value="urgencia">Urgencia Médica</option>
+                            </select>
+                            <span class="text-danger small" id="errorReason"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label for="appointmentDate" class="form-label fw-medium small">Fecha y Hora</label>
+                            <input type="datetime-local" class="form-control" id="appointmentDate">
+                            <span class="text-danger small" id="errorDate"></span>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary fw-medium py-2">Confirmar Cita</button>
+                            <button type="button" class="btn btn-light fw-medium py-2" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/validations.js"></script>
+</body>
+</html>
+

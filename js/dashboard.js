@@ -6,7 +6,6 @@
 let listaMascotas = [];
 let listaCitas = [];
 
-
 // ---------- funciones que uso en varias partes ----------
 
 // el correo tiene que terminar en alguno de los dominios permitidos
@@ -35,6 +34,53 @@ function marcarOk(idCampo, idError) {
   campo.classList.remove("campo-malo");
   campo.classList.add("campo-bueno");
   return true;
+}
+
+// casi todos los campos de texto se validan igual (requerido + largo maximo),
+// asi que en vez de repetir el mismo if en cada campo lo hago una sola vez aca
+function campoTexto(idCampo, idError, mensajeVacio, largoMax) {
+  const valor = document.getElementById(idCampo).value.trim();
+  if (valor === "") {
+    return marcarError(idCampo, idError, mensajeVacio);
+  }
+  if (valor.length > largoMax) {
+    return marcarError(idCampo, idError, "Maximo " + largoMax + " caracteres.");
+  }
+  return marcarOk(idCampo, idError);
+}
+
+// lo mismo para los select: solo reviso que se haya elegido algo
+function campoSelect(idCampo, idError, mensaje) {
+  if (document.getElementById(idCampo).value === "") {
+    return marcarError(idCampo, idError, mensaje);
+  }
+  return marcarOk(idCampo, idError);
+}
+
+// y para los correos: requerido, largo y dominio permitido
+function campoCorreo(idCampo, idError) {
+  const valor = document.getElementById(idCampo).value.trim();
+  if (valor === "") {
+    return marcarError(idCampo, idError, "El correo es obligatorio.");
+  }
+  if (valor.length > 100) {
+    return marcarError(idCampo, idError, "Maximo 100 caracteres.");
+  }
+  if (!correoValido(valor)) {
+    return marcarError(idCampo, idError, "Solo se aceptan correos @duoc.cl, @profesor.duoc.cl o @gmail.com.");
+  }
+  return marcarOk(idCampo, idError);
+}
+
+// llena un select con las opciones de un arreglo simple
+function llenarSelect(idSelect, lista) {
+  const select = document.getElementById(idSelect);
+  for (let i = 0; i < lista.length; i++) {
+    const opcion = document.createElement("option");
+    opcion.value = lista[i];
+    opcion.textContent = lista[i];
+    select.appendChild(opcion);
+  }
 }
 
 // localStorage solo guarda texto, por eso el stringify
@@ -68,7 +114,6 @@ function colorEstado(estado) {
   if (estado === "Atendida")   return "bg-secondary";
   return "bg-danger";
 }
-
 
 // ---------- vista inicio ----------
 
@@ -121,7 +166,6 @@ function mostrarProximasCitas() {
 
   cuerpo.innerHTML = html;
 }
-
 
 // ---------- vista mascotas ----------
 
@@ -198,31 +242,11 @@ function eliminarMascota(id) {
 // validaciones del formulario de mascota
 
 function validarNombreMascota() {
-  const valor = document.getElementById("mNombre").value.trim();
-  if (valor === "") {
-    return marcarError("mNombre", "errNombre", "El nombre es obligatorio.");
-  }
-  if (valor.length > 50) {
-    return marcarError("mNombre", "errNombre", "Maximo 50 caracteres.");
-  }
-  return marcarOk("mNombre", "errNombre");
+  return campoTexto("mNombre", "errNombre", "El nombre es obligatorio.", 50);
 }
 
 function validarEspecie() {
-  const valor = document.getElementById("mEspecie").value;
-  if (valor === "") {
-    return marcarError("mEspecie", "errEspecie", "Selecciona una especie.");
-  }
-  return marcarOk("mEspecie", "errEspecie");
-}
-
-function validarRaza() {
-  const valor = document.getElementById("mRaza").value.trim();
-  // la raza es opcional, solo reviso el largo
-  if (valor.length > 100) {
-    return marcarError("mRaza", "errRaza", "Maximo 100 caracteres.");
-  }
-  return marcarOk("mRaza", "errRaza");
+  return campoSelect("mEspecie", "errEspecie", "Selecciona una especie.");
 }
 
 function validarEdad() {
@@ -244,29 +268,11 @@ function validarEdad() {
 }
 
 function validarDuenio() {
-  const valor = document.getElementById("mDuenio").value.trim();
-  if (valor === "") {
-    return marcarError("mDuenio", "errDuenio", "El nombre del dueno es obligatorio.");
-  }
-  if (valor.length > 100) {
-    return marcarError("mDuenio", "errDuenio", "Maximo 100 caracteres.");
-  }
-  return marcarOk("mDuenio", "errDuenio");
+  return campoTexto("mDuenio", "errDuenio", "El nombre del dueno es obligatorio.", 100);
 }
 
 function validarCorreoMascota() {
-  const valor = document.getElementById("mCorreo").value.trim();
-  if (valor === "") {
-    return marcarError("mCorreo", "errCorreo", "El correo es obligatorio.");
-  }
-  if (valor.length > 100) {
-    return marcarError("mCorreo", "errCorreo", "Maximo 100 caracteres.");
-  }
-  if (!correoValido(valor)) {
-    return marcarError("mCorreo", "errCorreo",
-      "Solo se aceptan correos @duoc.cl, @profesor.duoc.cl o @gmail.com.");
-  }
-  return marcarOk("mCorreo", "errCorreo");
+  return campoCorreo("mCorreo", "errCorreo");
 }
 
 function guardarMascota(evento) {
@@ -275,12 +281,11 @@ function guardarMascota(evento) {
   // llamo a todas primero, asi se marcan todos los errores juntos
   const ok1 = validarNombreMascota();
   const ok2 = validarEspecie();
-  const ok3 = validarRaza();
-  const ok4 = validarEdad();
-  const ok5 = validarDuenio();
-  const ok6 = validarCorreoMascota();
+  const ok3 = validarEdad();
+  const ok4 = validarDuenio();
+  const ok5 = validarCorreoMascota();
 
-  if (!(ok1 && ok2 && ok3 && ok4 && ok5 && ok6)) {
+  if (!(ok1 && ok2 && ok3 && ok4 && ok5)) {
     return;
   }
 
@@ -338,7 +343,6 @@ function mostrarMensajeOk(texto) {
     caja.classList.add("d-none");
   }, 3000);
 }
-
 
 // ---------- vista citas ----------
 
@@ -409,11 +413,7 @@ function filtrarCitas() {
 // validaciones del formulario de cita
 
 function validarMascotaCita() {
-  const valor = document.getElementById("cMascota").value;
-  if (valor === "") {
-    return marcarError("cMascota", "errMascotaCita", "Selecciona una mascota.");
-  }
-  return marcarOk("cMascota", "errMascotaCita");
+  return campoSelect("cMascota", "errMascotaCita", "Selecciona una mascota.");
 }
 
 function validarFecha() {
@@ -447,22 +447,11 @@ function validarHora() {
 }
 
 function validarMotivo() {
-  const valor = document.getElementById("cMotivo").value.trim();
-  if (valor === "") {
-    return marcarError("cMotivo", "errMotivo", "El motivo es obligatorio.");
-  }
-  if (valor.length > 500) {
-    return marcarError("cMotivo", "errMotivo", "Maximo 500 caracteres.");
-  }
-  return marcarOk("cMotivo", "errMotivo");
+  return campoTexto("cMotivo", "errMotivo", "El motivo es obligatorio.", 500);
 }
 
 function validarVeterinario() {
-  const valor = document.getElementById("cVeterinario").value;
-  if (valor === "") {
-    return marcarError("cVeterinario", "errVeterinario", "Selecciona un veterinario.");
-  }
-  return marcarOk("cVeterinario", "errVeterinario");
+  return campoSelect("cVeterinario", "errVeterinario", "Selecciona un veterinario.");
 }
 
 function guardarCita(evento) {
@@ -527,15 +516,8 @@ function llenarSelectsDeCitas() {
     }
   }
 
-  const selectVet = document.getElementById("cVeterinario");
-  for (let i = 0; i < veterinarios.length; i++) {
-    const opcion = document.createElement("option");
-    opcion.value = veterinarios[i];
-    opcion.textContent = veterinarios[i];
-    selectVet.appendChild(opcion);
-  }
+  llenarSelect("cVeterinario", veterinarios);
 }
-
 
 // ---------- vista configuracion ----------
 
@@ -594,75 +576,31 @@ function validarRun() {
 }
 
 function validarNombreUsuario() {
-  const valor = document.getElementById("uNombre").value.trim();
-  if (valor === "") {
-    return marcarError("uNombre", "errNombreU", "El nombre es obligatorio.");
-  }
-  if (valor.length > 50) {
-    return marcarError("uNombre", "errNombreU", "Maximo 50 caracteres.");
-  }
-  return marcarOk("uNombre", "errNombreU");
+  return campoTexto("uNombre", "errNombreU", "El nombre es obligatorio.", 50);
 }
 
 function validarApellidos() {
-  const valor = document.getElementById("uApellidos").value.trim();
-  if (valor === "") {
-    return marcarError("uApellidos", "errApellidos", "Los apellidos son obligatorios.");
-  }
-  if (valor.length > 100) {
-    return marcarError("uApellidos", "errApellidos", "Maximo 100 caracteres.");
-  }
-  return marcarOk("uApellidos", "errApellidos");
+  return campoTexto("uApellidos", "errApellidos", "Los apellidos son obligatorios.", 100);
 }
 
 function validarCorreoUsuario() {
-  const valor = document.getElementById("uCorreo").value.trim();
-  if (valor === "") {
-    return marcarError("uCorreo", "errCorreoU", "El correo es obligatorio.");
-  }
-  if (valor.length > 100) {
-    return marcarError("uCorreo", "errCorreoU", "Maximo 100 caracteres.");
-  }
-  if (!correoValido(valor)) {
-    return marcarError("uCorreo", "errCorreoU",
-      "Solo se aceptan correos @duoc.cl, @profesor.duoc.cl o @gmail.com.");
-  }
-  return marcarOk("uCorreo", "errCorreoU");
+  return campoCorreo("uCorreo", "errCorreoU");
 }
 
 function validarTipoUsuario() {
-  const valor = document.getElementById("uTipo").value;
-  if (valor === "") {
-    return marcarError("uTipo", "errTipo", "Selecciona el tipo de usuario.");
-  }
-  return marcarOk("uTipo", "errTipo");
+  return campoSelect("uTipo", "errTipo", "Selecciona el tipo de usuario.");
 }
 
 function validarRegion() {
-  const valor = document.getElementById("uRegion").value;
-  if (valor === "") {
-    return marcarError("uRegion", "errRegion", "Selecciona una region.");
-  }
-  return marcarOk("uRegion", "errRegion");
+  return campoSelect("uRegion", "errRegion", "Selecciona una region.");
 }
 
 function validarComuna() {
-  const valor = document.getElementById("uComuna").value;
-  if (valor === "") {
-    return marcarError("uComuna", "errComuna", "Selecciona una comuna.");
-  }
-  return marcarOk("uComuna", "errComuna");
+  return campoSelect("uComuna", "errComuna", "Selecciona una comuna.");
 }
 
 function validarDireccion() {
-  const valor = document.getElementById("uDireccion").value.trim();
-  if (valor === "") {
-    return marcarError("uDireccion", "errDireccion", "La direccion es obligatoria.");
-  }
-  if (valor.length > 300) {
-    return marcarError("uDireccion", "errDireccion", "Maximo 300 caracteres.");
-  }
-  return marcarOk("uDireccion", "errDireccion");
+  return campoTexto("uDireccion", "errDireccion", "La direccion es obligatoria.", 300);
 }
 
 function llenarRegiones() {
@@ -685,13 +623,7 @@ function cambiarComunas() {
 
   for (let i = 0; i < regiones.length; i++) {
     if (regiones[i].nombre === regionElegida) {
-      const comunas = regiones[i].comunas;
-      for (let j = 0; j < comunas.length; j++) {
-        const opcion = document.createElement("option");
-        opcion.value = comunas[j];
-        opcion.textContent = comunas[j];
-        selectComuna.appendChild(opcion);
-      }
+      llenarSelect("uComuna", regiones[i].comunas);
       break;
     }
   }
@@ -751,7 +683,6 @@ function cargarPerfilGuardado() {
   document.getElementById("uDireccion").value = perfil.direccion;
 }
 
-
 // ---------- arranque ----------
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -768,13 +699,7 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarTablaMascotas("");
 
     // las especies salen del arreglo de mock-data.js
-    const selectEspecie = document.getElementById("mEspecie");
-    for (let i = 0; i < especies.length; i++) {
-      const opcion = document.createElement("option");
-      opcion.value = especies[i];
-      opcion.textContent = especies[i];
-      selectEspecie.appendChild(opcion);
-    }
+    llenarSelect("mEspecie", especies);
 
     document.getElementById("buscador").addEventListener("input", buscarMascota);
     document.getElementById("formMascota").addEventListener("submit", guardarMascota);
@@ -782,7 +707,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // validacion en tiempo real
     document.getElementById("mNombre").addEventListener("input", validarNombreMascota);
     document.getElementById("mEspecie").addEventListener("change", validarEspecie);
-    document.getElementById("mRaza").addEventListener("input", validarRaza);
     document.getElementById("mEdad").addEventListener("input", validarEdad);
     document.getElementById("mDuenio").addEventListener("input", validarDuenio);
     document.getElementById("mCorreo").addEventListener("input", validarCorreoMascota);

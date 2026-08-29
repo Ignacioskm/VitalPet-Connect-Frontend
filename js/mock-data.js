@@ -15,3 +15,10 @@ const especies = ["Perro", "Gato", "Ave", "Conejo", "Otro"];
 
 // correos que acepta el sistema
 const dominiosPermitidos = ["@duoc.cl", "@profesor.duoc.cl", "@gmail.com"];
+
+const horasDisponibles = [
+    "Lunes 12 Oct - 09:00 AM",
+    "Lunes 12 Oct - 11:30 AM",
+    "Martes 13 Oct - 03:00 PM",
+    "Miércoles 14 Oct - 10:00 AM"
+];

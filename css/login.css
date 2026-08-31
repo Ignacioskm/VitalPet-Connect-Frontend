@@ -1,0 +1,114 @@
+
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 12px 35px rgba(34, 62, 74, 0.08);
+    overflow: hidden;
+}
+
+/* Cabecera con el azul marino del Sidebar */
+.brand-header {
+    background-color: #223e4a;
+    padding: 2.25rem 1.5rem 1.75rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Insignia circular como las tarjetas del Dashboard */
+.brand-badge {
+    width: 58px;
+    height: 58px;
+    background-color: #26a69a;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 4px 12px rgba(38, 166, 154, 0.4);
+}
+
+.brand-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.brand-subtitle {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 0.25rem;
+}
+
+.form-body {
+    padding: 2rem 1.75rem;
+}
+
+/* Campos de entrada estilizados */
+.custom-input-group .input-group-text {
+    background-color: #f8fafc;
+    border-right: none;
+    border-color: #e2e8f0;
+    color: #223e4a;
+}
+
+.custom-input-group .form-control {
+    background-color: #f8fafc;
+    border-left: none;
+    border-color: #e2e8f0;
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
+}
+
+.custom-input-group .form-control:focus {
+    background-color: #ffffff;
+    box-shadow: none;
+    border-color: #26a69a;
+}
+
+.custom-input-group:focus-within .input-group-text {
+    border-color: #26a69a;
+    color: #26a69a;
+}
+
+/* Botón principal Turquesa */
+.btn-vitalpet {
+    background-color: #26a69a !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-vitalpet:hover {
+    background-color: #1f877d !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(38, 166, 154, 0.35);
+}
+
+.register-link {
+    color: #26a69a;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    color: #1f877d;
+    text-decoration: underline;
+}

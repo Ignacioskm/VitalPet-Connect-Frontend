@@ -1,10 +1,10 @@
 // dashboard.js
-// este archivo lo usan las vistas del panel, por eso antes de
+// este archivo lo usan todas las vistas del panel, por eso antes de
 // ejecutar algo reviso si el elemento existe en la pagina
 
 // datos con los que trabaja la pagina
 let listaMascotas = [];
-
+let listaCitas = [];
 
 // ---------- funciones que uso en varias partes ----------
 
@@ -36,6 +36,53 @@ function marcarOk(idCampo, idError) {
   return true;
 }
 
+// casi todos los campos de texto se validan igual (requerido + largo maximo),
+// asi que en vez de repetir el mismo if en cada campo lo hago una sola vez aca
+function campoTexto(idCampo, idError, mensajeVacio, largoMax) {
+  const valor = document.getElementById(idCampo).value.trim();
+  if (valor === "") {
+    return marcarError(idCampo, idError, mensajeVacio);
+  }
+  if (valor.length > largoMax) {
+    return marcarError(idCampo, idError, "Maximo " + largoMax + " caracteres.");
+  }
+  return marcarOk(idCampo, idError);
+}
+
+// lo mismo para los select: solo reviso que se haya elegido algo
+function campoSelect(idCampo, idError, mensaje) {
+  if (document.getElementById(idCampo).value === "") {
+    return marcarError(idCampo, idError, mensaje);
+  }
+  return marcarOk(idCampo, idError);
+}
+
+// y para los correos: requerido, largo y dominio permitido
+function campoCorreo(idCampo, idError) {
+  const valor = document.getElementById(idCampo).value.trim();
+  if (valor === "") {
+    return marcarError(idCampo, idError, "El correo es obligatorio.");
+  }
+  if (valor.length > 100) {
+    return marcarError(idCampo, idError, "Maximo 100 caracteres.");
+  }
+  if (!correoValido(valor)) {
+    return marcarError(idCampo, idError, "Solo se aceptan correos @duoc.cl, @profesor.duoc.cl o @gmail.com.");
+  }
+  return marcarOk(idCampo, idError);
+}
+
+// llena un select con las opciones de un arreglo simple
+function llenarSelect(idSelect, lista) {
+  const select = document.getElementById(idSelect);
+  for (let i = 0; i < lista.length; i++) {
+    const opcion = document.createElement("option");
+    opcion.value = lista[i];
+    opcion.textContent = lista[i];
+    select.appendChild(opcion);
+  }
+}
+
 // localStorage solo guarda texto, por eso el stringify
 function guardarEnLocal(clave, datos) {
   localStorage.setItem(clave, JSON.stringify(datos));
@@ -51,76 +98,74 @@ function cargarDatos() {
     listaMascotas = mascotas;
     guardarEnLocal("vp_mascotas", listaMascotas);
   }
-}
 
-// deja los datos como estaban al principio
-function restaurarDatos() {
-  if (confirm("Se van a borrar los cambios y volverán los datos de prueba. ¿Continuar?")) {
-    localStorage.removeItem("vp_mascotas");
-    location.reload();
+  const citasGuardadas = localStorage.getItem("vp_citas");
+  if (citasGuardadas) {
+    listaCitas = JSON.parse(citasGuardadas);
+  } else {
+    listaCitas = citas;
+    guardarEnLocal("vp_citas", listaCitas);
   }
 }
 
+function colorEstado(estado) {
+  if (estado === "Confirmada") return "bg-success";
+  if (estado === "Pendiente")  return "bg-warning text-dark";
+  if (estado === "Atendida")   return "bg-secondary";
+  return "bg-danger";
+}
 
 // ---------- vista inicio ----------
 
 function mostrarResumen() {
   let activas = 0;
-  let perros = 0;
-  let gatos = 0;
-
   for (let i = 0; i < listaMascotas.length; i++) {
     if (listaMascotas[i].estado === "Activo") {
       activas++;
     }
-    if (listaMascotas[i].especie === "Perro") perros++;
-    if (listaMascotas[i].especie === "Gato") gatos++;
+  }
+
+  let pendientes = 0;
+  let confirmadas = 0;
+  for (let i = 0; i < listaCitas.length; i++) {
+    if (listaCitas[i].estado === "Pendiente")  pendientes++;
+    if (listaCitas[i].estado === "Confirmada") confirmadas++;
   }
 
   document.getElementById("totalMascotas").textContent = listaMascotas.length;
   document.getElementById("mascotasActivas").textContent = activas;
-  document.getElementById("totalPerros").textContent = perros;
-  document.getElementById("totalGatos").textContent = gatos;
+  document.getElementById("citasPendientes").textContent = pendientes;
+  document.getElementById("citasConfirmadas").textContent = confirmadas;
 
-  // aviso si hay fichas inactivas
-  const inactivas = listaMascotas.length - activas;
-  if (inactivas > 0) {
-    document.getElementById("avisoInactivas").classList.remove("d-none");
+  // aviso amarillo si hay muchas citas sin confirmar
+  const aviso = document.getElementById("avisoPendientes");
+  if (pendientes >= 3) {
+    aviso.classList.remove("d-none");
     document.getElementById("textoAviso").textContent =
-      "Hay " + inactivas + " ficha(s) inactiva(s) en el sistema.";
+      "Hay " + pendientes + " citas pendientes por confirmar.";
   }
 }
 
-// las ultimas 5 que se registraron
-function mostrarUltimasMascotas() {
-  const cuerpo = document.getElementById("tablaUltimas");
+function mostrarProximasCitas() {
+  const cuerpo = document.getElementById("tablaProximas");
   let html = "";
 
-  let desde = listaMascotas.length - 5;
-  if (desde < 0) {
-    desde = 0;
-  }
-
-  for (let i = listaMascotas.length - 1; i >= desde; i--) {
-    const m = listaMascotas[i];
-
-    let color = "bg-secondary";
-    if (m.estado === "Activo") {
-      color = "bg-success";
+  for (let i = 0; i < listaCitas.length; i++) {
+    const cita = listaCitas[i];
+    if (cita.estado === "Pendiente" || cita.estado === "Confirmada") {
+      html += "<tr>" +
+        "<td>" + cita.mascota + "</td>" +
+        "<td>" + cita.duenio + "</td>" +
+        "<td>" + cita.fecha + "</td>" +
+        "<td>" + cita.hora + "</td>" +
+        "<td>" + cita.veterinario + "</td>" +
+        "<td><span class='badge " + colorEstado(cita.estado) + "'>" + cita.estado + "</span></td>" +
+        "</tr>";
     }
-
-    html += "<tr>" +
-      "<td>" + m.nombre + "</td>" +
-      "<td>" + m.especie + "</td>" +
-      "<td>" + m.raza + "</td>" +
-      "<td>" + m.duenio + "</td>" +
-      "<td><span class='badge " + color + "'>" + m.estado + "</span></td>" +
-      "</tr>";
   }
 
   cuerpo.innerHTML = html;
 }
-
 
 // ---------- vista mascotas ----------
 
@@ -178,7 +223,7 @@ function buscarMascota() {
 }
 
 function eliminarMascota(id) {
-  if (!confirm("¿Seguro que quieres eliminar esta mascota?")) {
+  if (!confirm("Seguro que quieres eliminar esta mascota?")) {
     return;
   }
 
@@ -197,31 +242,11 @@ function eliminarMascota(id) {
 // validaciones del formulario de mascota
 
 function validarNombreMascota() {
-  const valor = document.getElementById("mNombre").value.trim();
-  if (valor === "") {
-    return marcarError("mNombre", "errNombre", "El nombre es obligatorio.");
-  }
-  if (valor.length > 50) {
-    return marcarError("mNombre", "errNombre", "Máximo 50 caracteres.");
-  }
-  return marcarOk("mNombre", "errNombre");
+  return campoTexto("mNombre", "errNombre", "El nombre es obligatorio.", 50);
 }
 
 function validarEspecie() {
-  const valor = document.getElementById("mEspecie").value;
-  if (valor === "") {
-    return marcarError("mEspecie", "errEspecie", "Selecciona una especie.");
-  }
-  return marcarOk("mEspecie", "errEspecie");
-}
-
-function validarRaza() {
-  const valor = document.getElementById("mRaza").value.trim();
-  // la raza es opcional, solo reviso el largo
-  if (valor.length > 100) {
-    return marcarError("mRaza", "errRaza", "Máximo 100 caracteres.");
-  }
-  return marcarOk("mRaza", "errRaza");
+  return campoSelect("mEspecie", "errEspecie", "Selecciona una especie.");
 }
 
 function validarEdad() {
@@ -231,41 +256,23 @@ function validarEdad() {
   }
   const numero = Number(valor);
   if (isNaN(numero) || numero < 0) {
-    return marcarError("mEdad", "errEdad", "Debe ser un número mayor o igual a 0.");
+    return marcarError("mEdad", "errEdad", "Debe ser un numero mayor o igual a 0.");
   }
   if (!Number.isInteger(numero)) {
-    return marcarError("mEdad", "errEdad", "Solo se aceptan números enteros.");
+    return marcarError("mEdad", "errEdad", "Solo se aceptan numeros enteros.");
   }
   if (numero > 30) {
-    return marcarError("mEdad", "errEdad", "Revisa la edad, el máximo permitido es 30.");
+    return marcarError("mEdad", "errEdad", "Revisa la edad, el maximo permitido es 30.");
   }
   return marcarOk("mEdad", "errEdad");
 }
 
 function validarDuenio() {
-  const valor = document.getElementById("mDuenio").value.trim();
-  if (valor === "") {
-    return marcarError("mDuenio", "errDuenio", "El nombre del dueño es obligatorio.");
-  }
-  if (valor.length > 100) {
-    return marcarError("mDuenio", "errDuenio", "Máximo 100 caracteres.");
-  }
-  return marcarOk("mDuenio", "errDuenio");
+  return campoTexto("mDuenio", "errDuenio", "El nombre del dueno es obligatorio.", 100);
 }
 
 function validarCorreoMascota() {
-  const valor = document.getElementById("mCorreo").value.trim();
-  if (valor === "") {
-    return marcarError("mCorreo", "errCorreo", "El correo es obligatorio.");
-  }
-  if (valor.length > 100) {
-    return marcarError("mCorreo", "errCorreo", "Máximo 100 caracteres.");
-  }
-  if (!correoValido(valor)) {
-    return marcarError("mCorreo", "errCorreo",
-      "Solo se aceptan correos @duoc.cl, @profesor.duoc.cl o @gmail.com.");
-  }
-  return marcarOk("mCorreo", "errCorreo");
+  return campoCorreo("mCorreo", "errCorreo");
 }
 
 function guardarMascota(evento) {
@@ -274,12 +281,11 @@ function guardarMascota(evento) {
   // llamo a todas primero, asi se marcan todos los errores juntos
   const ok1 = validarNombreMascota();
   const ok2 = validarEspecie();
-  const ok3 = validarRaza();
-  const ok4 = validarEdad();
-  const ok5 = validarDuenio();
-  const ok6 = validarCorreoMascota();
+  const ok3 = validarEdad();
+  const ok4 = validarDuenio();
+  const ok5 = validarCorreoMascota();
 
-  if (!(ok1 && ok2 && ok3 && ok4 && ok5 && ok6)) {
+  if (!(ok1 && ok2 && ok3 && ok4 && ok5)) {
     return;
   }
 
@@ -338,6 +344,344 @@ function mostrarMensajeOk(texto) {
   }, 3000);
 }
 
+// ---------- vista citas ----------
+
+function mostrarTablaCitas(estadoFiltro) {
+  const cuerpo = document.getElementById("tablaCitas");
+  let html = "";
+  let encontradas = 0;
+
+  for (let i = 0; i < listaCitas.length; i++) {
+    const c = listaCitas[i];
+
+    if (estadoFiltro !== "Todas" && c.estado !== estadoFiltro) {
+      continue;
+    }
+
+    encontradas++;
+
+    html += "<tr>" +
+      "<td>" + c.id + "</td>" +
+      "<td>" + c.mascota + "</td>" +
+      "<td>" + c.duenio + "</td>" +
+      "<td>" + c.fecha + "</td>" +
+      "<td>" + c.hora + "</td>" +
+      "<td>" + c.motivo + "</td>" +
+      "<td>" + c.veterinario + "</td>" +
+      "<td><span class='badge " + colorEstado(c.estado) + "'>" + c.estado + "</span></td>" +
+      "<td>" + botonesDeEstado(c) + "</td>" +
+      "</tr>";
+  }
+
+  if (encontradas === 0) {
+    html = "<tr><td colspan='9' class='text-center text-muted py-3'>" +
+           "No hay citas con ese estado.</td></tr>";
+  }
+
+  cuerpo.innerHTML = html;
+  document.getElementById("contadorCitas").textContent = encontradas;
+}
+
+// muestro solo los botones que tienen sentido segun el estado
+function botonesDeEstado(cita) {
+  if (cita.estado === "Pendiente") {
+    return "<button class='btn btn-sm btn-vp me-1' onclick='cambiarEstadoCita(" + cita.id + ", \"Confirmada\")'>Confirmar</button>" +
+           "<button class='btn btn-sm btn-outline-danger' onclick='cambiarEstadoCita(" + cita.id + ", \"Cancelada\")'>Cancelar</button>";
+  }
+  if (cita.estado === "Confirmada") {
+    return "<button class='btn btn-sm btn-outline-secondary' onclick='cambiarEstadoCita(" + cita.id + ", \"Atendida\")'>Marcar atendida</button>";
+  }
+  return "<span class='text-muted'>Sin acciones</span>";
+}
+
+function cambiarEstadoCita(id, nuevoEstado) {
+  for (let i = 0; i < listaCitas.length; i++) {
+    if (listaCitas[i].id === id) {
+      listaCitas[i].estado = nuevoEstado;
+      break;
+    }
+  }
+  guardarEnLocal("vp_citas", listaCitas);
+  filtrarCitas();
+}
+
+function filtrarCitas() {
+  const estado = document.getElementById("filtroEstado").value;
+  mostrarTablaCitas(estado);
+}
+
+// validaciones del formulario de cita
+
+function validarMascotaCita() {
+  return campoSelect("cMascota", "errMascotaCita", "Selecciona una mascota.");
+}
+
+function validarFecha() {
+  const valor = document.getElementById("cFecha").value;
+  if (valor === "") {
+    return marcarError("cFecha", "errFecha", "La fecha es obligatoria.");
+  }
+
+  // no dejo agendar para un dia que ya paso
+  const hoy = new Date();
+  const fechaElegida = new Date(valor + "T00:00:00");
+  hoy.setHours(0, 0, 0, 0);
+
+  if (fechaElegida < hoy) {
+    return marcarError("cFecha", "errFecha", "No se puede agendar en una fecha anterior a hoy.");
+  }
+  return marcarOk("cFecha", "errFecha");
+}
+
+function validarHora() {
+  const valor = document.getElementById("cHora").value;
+  if (valor === "") {
+    return marcarError("cHora", "errHora", "La hora es obligatoria.");
+  }
+
+  // la clinica atiende de 09:00 a 19:00
+  if (valor < "09:00" || valor > "19:00") {
+    return marcarError("cHora", "errHora", "El horario de atencion es de 09:00 a 19:00.");
+  }
+  return marcarOk("cHora", "errHora");
+}
+
+function validarMotivo() {
+  return campoTexto("cMotivo", "errMotivo", "El motivo es obligatorio.", 500);
+}
+
+function validarVeterinario() {
+  return campoSelect("cVeterinario", "errVeterinario", "Selecciona un veterinario.");
+}
+
+function guardarCita(evento) {
+  evento.preventDefault();
+
+  const ok1 = validarMascotaCita();
+  const ok2 = validarFecha();
+  const ok3 = validarHora();
+  const ok4 = validarMotivo();
+  const ok5 = validarVeterinario();
+
+  if (!(ok1 && ok2 && ok3 && ok4 && ok5)) {
+    return;
+  }
+
+  const nombreMascota = document.getElementById("cMascota").value;
+
+  // saco el dueno desde la lista de mascotas
+  let duenio = "";
+  for (let i = 0; i < listaMascotas.length; i++) {
+    if (listaMascotas[i].nombre === nombreMascota) {
+      duenio = listaMascotas[i].duenio;
+      break;
+    }
+  }
+
+  let ultimoId = 100;
+  for (let i = 0; i < listaCitas.length; i++) {
+    if (listaCitas[i].id > ultimoId) {
+      ultimoId = listaCitas[i].id;
+    }
+  }
+
+  const nuevaCita = {
+    id: ultimoId + 1,
+    mascota: nombreMascota,
+    duenio: duenio,
+    fecha: document.getElementById("cFecha").value,
+    hora: document.getElementById("cHora").value,
+    motivo: document.getElementById("cMotivo").value.trim(),
+    veterinario: document.getElementById("cVeterinario").value,
+    estado: "Pendiente"
+  };
+
+  listaCitas.push(nuevaCita);
+  guardarEnLocal("vp_citas", listaCitas);
+
+  limpiarFormulario("formCita");
+  document.getElementById("filtroEstado").value = "Todas";
+  mostrarTablaCitas("Todas");
+  mostrarMensajeOk("Cita agendada correctamente para " + nombreMascota + ".");
+}
+
+function llenarSelectsDeCitas() {
+  const selectMascota = document.getElementById("cMascota");
+  for (let i = 0; i < listaMascotas.length; i++) {
+    if (listaMascotas[i].estado === "Activo") {
+      const opcion = document.createElement("option");
+      opcion.value = listaMascotas[i].nombre;
+      opcion.textContent = listaMascotas[i].nombre + " (" + listaMascotas[i].duenio + ")";
+      selectMascota.appendChild(opcion);
+    }
+  }
+
+  llenarSelect("cVeterinario", veterinarios);
+}
+
+// ---------- vista configuracion ----------
+
+// valida el RUN calculando el digito verificador (modulo 11)
+function runValido(run) {
+  run = run.toUpperCase();
+
+  if (run.length < 7 || run.length > 9) {
+    return false;
+  }
+
+  const cuerpo = run.substring(0, run.length - 1);
+  const dv = run.charAt(run.length - 1);
+
+  // el cuerpo tiene que ser solo numeros
+  for (let i = 0; i < cuerpo.length; i++) {
+    if (cuerpo[i] < "0" || cuerpo[i] > "9") {
+      return false;
+    }
+  }
+
+  // multiplico de derecha a izquierda por 2,3,4,5,6,7 y vuelvo al 2
+  let suma = 0;
+  let multiplo = 2;
+  for (let i = cuerpo.length - 1; i >= 0; i--) {
+    suma = suma + Number(cuerpo[i]) * multiplo;
+    multiplo++;
+    if (multiplo > 7) {
+      multiplo = 2;
+    }
+  }
+
+  const resto = 11 - (suma % 11);
+  let dvEsperado = String(resto);
+  if (resto === 11) dvEsperado = "0";
+  if (resto === 10) dvEsperado = "K";
+
+  return dv === dvEsperado;
+}
+
+function validarRun() {
+  const valor = document.getElementById("uRun").value.trim().toUpperCase();
+  if (valor === "") {
+    return marcarError("uRun", "errRun", "El RUN es obligatorio.");
+  }
+  if (valor.indexOf(".") !== -1 || valor.indexOf("-") !== -1) {
+    return marcarError("uRun", "errRun", "Escribe el RUN sin puntos ni guion. Ej: 123456785");
+  }
+  if (valor.length < 7 || valor.length > 9) {
+    return marcarError("uRun", "errRun", "El RUN debe tener entre 7 y 9 caracteres.");
+  }
+  if (!runValido(valor)) {
+    return marcarError("uRun", "errRun", "El RUN no es valido, revisa el digito verificador.");
+  }
+  return marcarOk("uRun", "errRun");
+}
+
+function validarNombreUsuario() {
+  return campoTexto("uNombre", "errNombreU", "El nombre es obligatorio.", 50);
+}
+
+function validarApellidos() {
+  return campoTexto("uApellidos", "errApellidos", "Los apellidos son obligatorios.", 100);
+}
+
+function validarCorreoUsuario() {
+  return campoCorreo("uCorreo", "errCorreoU");
+}
+
+function validarTipoUsuario() {
+  return campoSelect("uTipo", "errTipo", "Selecciona el tipo de usuario.");
+}
+
+function validarRegion() {
+  return campoSelect("uRegion", "errRegion", "Selecciona una region.");
+}
+
+function validarComuna() {
+  return campoSelect("uComuna", "errComuna", "Selecciona una comuna.");
+}
+
+function validarDireccion() {
+  return campoTexto("uDireccion", "errDireccion", "La direccion es obligatoria.", 300);
+}
+
+function llenarRegiones() {
+  const select = document.getElementById("uRegion");
+  for (let i = 0; i < regiones.length; i++) {
+    const opcion = document.createElement("option");
+    opcion.value = regiones[i].nombre;
+    opcion.textContent = regiones[i].nombre;
+    select.appendChild(opcion);
+  }
+}
+
+// al cambiar la region hay que cambiar las comunas
+function cambiarComunas() {
+  const regionElegida = document.getElementById("uRegion").value;
+  const selectComuna = document.getElementById("uComuna");
+
+  // lo dejo vacio y despues le agrego las comunas de esa region
+  selectComuna.innerHTML = "<option value=''>Selecciona una comuna</option>";
+
+  for (let i = 0; i < regiones.length; i++) {
+    if (regiones[i].nombre === regionElegida) {
+      llenarSelect("uComuna", regiones[i].comunas);
+      break;
+    }
+  }
+
+  validarRegion();
+}
+
+function guardarPerfil(evento) {
+  evento.preventDefault();
+
+  const ok1 = validarRun();
+  const ok2 = validarNombreUsuario();
+  const ok3 = validarApellidos();
+  const ok4 = validarCorreoUsuario();
+  const ok5 = validarTipoUsuario();
+  const ok6 = validarRegion();
+  const ok7 = validarComuna();
+  const ok8 = validarDireccion();
+
+  if (!(ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8)) {
+    return;
+  }
+
+  const perfil = {
+    run: document.getElementById("uRun").value.trim().toUpperCase(),
+    nombre: document.getElementById("uNombre").value.trim(),
+    apellidos: document.getElementById("uApellidos").value.trim(),
+    correo: document.getElementById("uCorreo").value.trim(),
+    nacimiento: document.getElementById("uNacimiento").value,
+    tipo: document.getElementById("uTipo").value,
+    region: document.getElementById("uRegion").value,
+    comuna: document.getElementById("uComuna").value,
+    direccion: document.getElementById("uDireccion").value.trim()
+  };
+
+  guardarEnLocal("vp_perfil", perfil);
+  mostrarMensajeOk("Los datos del perfil se guardaron correctamente.");
+}
+
+// si ya habia guardado el perfil antes lo vuelvo a mostrar
+function cargarPerfilGuardado() {
+  const guardado = localStorage.getItem("vp_perfil");
+  if (!guardado) {
+    return;
+  }
+
+  const perfil = JSON.parse(guardado);
+  document.getElementById("uRun").value = perfil.run;
+  document.getElementById("uNombre").value = perfil.nombre;
+  document.getElementById("uApellidos").value = perfil.apellidos;
+  document.getElementById("uCorreo").value = perfil.correo;
+  document.getElementById("uNacimiento").value = perfil.nacimiento;
+  document.getElementById("uTipo").value = perfil.tipo;
+  document.getElementById("uRegion").value = perfil.region;
+  cambiarComunas();
+  document.getElementById("uComuna").value = perfil.comuna;
+  document.getElementById("uDireccion").value = perfil.direccion;
+}
 
 // ---------- arranque ----------
 
@@ -347,7 +691,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // inicio
   if (document.getElementById("totalMascotas")) {
     mostrarResumen();
-    mostrarUltimasMascotas();
+    mostrarProximasCitas();
   }
 
   // mascotas
@@ -355,13 +699,7 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarTablaMascotas("");
 
     // las especies salen del arreglo de mock-data.js
-    const selectEspecie = document.getElementById("mEspecie");
-    for (let i = 0; i < especies.length; i++) {
-      const opcion = document.createElement("option");
-      opcion.value = especies[i];
-      opcion.textContent = especies[i];
-      selectEspecie.appendChild(opcion);
-    }
+    llenarSelect("mEspecie", especies);
 
     document.getElementById("buscador").addEventListener("input", buscarMascota);
     document.getElementById("formMascota").addEventListener("submit", guardarMascota);
@@ -369,9 +707,45 @@ document.addEventListener("DOMContentLoaded", function () {
     // validacion en tiempo real
     document.getElementById("mNombre").addEventListener("input", validarNombreMascota);
     document.getElementById("mEspecie").addEventListener("change", validarEspecie);
-    document.getElementById("mRaza").addEventListener("input", validarRaza);
     document.getElementById("mEdad").addEventListener("input", validarEdad);
     document.getElementById("mDuenio").addEventListener("input", validarDuenio);
     document.getElementById("mCorreo").addEventListener("input", validarCorreoMascota);
+  }
+
+  // citas
+  if (document.getElementById("tablaCitas")) {
+    llenarSelectsDeCitas();
+    mostrarTablaCitas("Todas");
+
+    document.getElementById("filtroEstado").addEventListener("change", filtrarCitas);
+    document.getElementById("formCita").addEventListener("submit", guardarCita);
+
+    document.getElementById("cMascota").addEventListener("change", validarMascotaCita);
+    document.getElementById("cFecha").addEventListener("change", validarFecha);
+    document.getElementById("cHora").addEventListener("change", validarHora);
+    document.getElementById("cMotivo").addEventListener("input", validarMotivo);
+    document.getElementById("cVeterinario").addEventListener("change", validarVeterinario);
+
+    document.getElementById("cMotivo").addEventListener("input", function () {
+      const largo = document.getElementById("cMotivo").value.length;
+      document.getElementById("contadorMotivo").textContent = largo + " / 500";
+    });
+  }
+
+  // configuracion
+  if (document.getElementById("formPerfil")) {
+    llenarRegiones();
+    cargarPerfilGuardado();
+
+    document.getElementById("formPerfil").addEventListener("submit", guardarPerfil);
+    document.getElementById("uRegion").addEventListener("change", cambiarComunas);
+
+    document.getElementById("uRun").addEventListener("input", validarRun);
+    document.getElementById("uNombre").addEventListener("input", validarNombreUsuario);
+    document.getElementById("uApellidos").addEventListener("input", validarApellidos);
+    document.getElementById("uCorreo").addEventListener("input", validarCorreoUsuario);
+    document.getElementById("uTipo").addEventListener("change", validarTipoUsuario);
+    document.getElementById("uComuna").addEventListener("change", validarComuna);
+    document.getElementById("uDireccion").addEventListener("input", validarDireccion);
   }
 });

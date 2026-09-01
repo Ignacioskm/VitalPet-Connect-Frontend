@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmPassword = document.getElementById('confirmPassword').value;
             const email = document.getElementById('email').value.trim().toLowerCase();
             const phone = document.getElementById('phone').value.trim();
-           
+        
             // Inicializamos el modal de Bootstrap
             const modalElement = document.getElementById('customAlertModal');
             const alertModal = new bootstrap.Modal(modalElement);

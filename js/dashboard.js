@@ -683,6 +683,95 @@ function cargarPerfilGuardado() {
   document.getElementById("uDireccion").value = perfil.direccion;
 }
 
+
+// ---------- vista del cliente (dashboard-user.html) ----------
+
+// junta los nombres de los duenos sin repetirlos
+function listaDeClientes() {
+  const clientes = [];
+  for (let i = 0; i < listaMascotas.length; i++) {
+    if (clientes.indexOf(listaMascotas[i].duenio) === -1) {
+      clientes.push(listaMascotas[i].duenio);
+    }
+  }
+  return clientes;
+}
+
+function mostrarMisMascotas(cliente) {
+  const cuerpo = document.getElementById("tablaMisMascotas");
+  let html = "";
+  let encontradas = 0;
+
+  for (let i = 0; i < listaMascotas.length; i++) {
+    const m = listaMascotas[i];
+    if (m.duenio !== cliente) {
+      continue;
+    }
+
+    encontradas++;
+
+    let color = "bg-secondary";
+    if (m.estado === "Activo") {
+      color = "bg-success";
+    }
+
+    html += "<tr>" +
+      "<td>" + m.nombre + "</td>" +
+      "<td>" + m.especie + "</td>" +
+      "<td>" + m.raza + "</td>" +
+      "<td>" + m.edad + "</td>" +
+      "<td><span class='badge " + color + "'>" + m.estado + "</span></td>" +
+      "</tr>";
+  }
+
+  if (encontradas === 0) {
+    html = "<tr><td colspan='5' class='text-center text-muted py-3'>" +
+           "No tienes mascotas registradas.</td></tr>";
+  }
+
+  cuerpo.innerHTML = html;
+}
+
+function mostrarMisCitas(cliente) {
+  const cuerpo = document.getElementById("tablaMisCitas");
+  let html = "";
+  let encontradas = 0;
+
+  for (let i = 0; i < listaCitas.length; i++) {
+    const c = listaCitas[i];
+    if (c.duenio !== cliente) {
+      continue;
+    }
+
+    encontradas++;
+
+    html += "<tr>" +
+      "<td>" + c.mascota + "</td>" +
+      "<td>" + c.fecha + "</td>" +
+      "<td>" + c.hora + "</td>" +
+      "<td>" + c.motivo + "</td>" +
+      "<td>" + c.veterinario + "</td>" +
+      "<td><span class='badge " + colorEstado(c.estado) + "'>" + c.estado + "</span></td>" +
+      "</tr>";
+  }
+
+  if (encontradas === 0) {
+    html = "<tr><td colspan='6' class='text-center text-muted py-3'>" +
+           "No tienes citas agendadas.</td></tr>";
+  }
+
+  cuerpo.innerHTML = html;
+}
+
+// redibuja las dos tablas con el cliente elegido en el select
+function cambiarCliente() {
+  const cliente = document.getElementById("selectCliente").value;
+  document.getElementById("nombreCliente").textContent = cliente;
+  mostrarMisMascotas(cliente);
+  mostrarMisCitas(cliente);
+}
+
+
 // ---------- arranque ----------
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -730,6 +819,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const largo = document.getElementById("cMotivo").value.length;
       document.getElementById("contadorMotivo").textContent = largo + " / 500";
     });
+  }
+
+  // vista del cliente
+  if (document.getElementById("tablaMisMascotas")) {
+    llenarSelect("selectCliente", listaDeClientes());
+    document.getElementById("selectCliente").addEventListener("change", cambiarCliente);
+    cambiarCliente();
   }
 
   // configuracion

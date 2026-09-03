@@ -710,22 +710,16 @@ function mostrarMisMascotas(cliente) {
 
     encontradas++;
 
-    let color = "bg-secondary";
-    if (m.estado === "Activo") {
-      color = "bg-success";
-    }
-
     html += "<tr>" +
       "<td>" + m.nombre + "</td>" +
       "<td>" + m.especie + "</td>" +
       "<td>" + m.raza + "</td>" +
       "<td>" + m.edad + "</td>" +
-      "<td><span class='badge " + color + "'>" + m.estado + "</span></td>" +
       "</tr>";
   }
 
   if (encontradas === 0) {
-    html = "<tr><td colspan='5' class='text-center text-muted py-3'>" +
+    html = "<tr><td colspan='4' class='text-center text-muted py-3'>" +
            "No tienes mascotas registradas.</td></tr>";
   }
 
@@ -751,12 +745,11 @@ function mostrarMisCitas(cliente) {
       "<td>" + c.hora + "</td>" +
       "<td>" + c.motivo + "</td>" +
       "<td>" + c.veterinario + "</td>" +
-      "<td><span class='badge " + colorEstado(c.estado) + "'>" + c.estado + "</span></td>" +
       "</tr>";
   }
 
   if (encontradas === 0) {
-    html = "<tr><td colspan='6' class='text-center text-muted py-3'>" +
+    html = "<tr><td colspan='5' class='text-center text-muted py-3'>" +
            "No tienes citas agendadas.</td></tr>";
   }
 

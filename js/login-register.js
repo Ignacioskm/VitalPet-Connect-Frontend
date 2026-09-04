@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Si el registro es exitoso
-            modalBadge.style.backgroundColor = '#26a69a';
+            modalBadge.style.backgroundColor = '#0A58CA';
             modalIcon.className = 'fa-solid fa-circle-check fs-2 text-white';
             modalTitle.textContent = '¡Registro Exitoso!';
             modalMessage.textContent = 'Tu cuenta ha sido creada en VitalPet Connect. Haz clic en el botón para iniciar sesión.';
@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Captura de valores
         const email = document.getElementById('email').value.trim().toLowerCase();
-        const password = document.getElementById('password').value;
 
         const esEmailValido = dominiosPermitidos.some(dominio => email.endsWith(dominio));
 
@@ -107,7 +106,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
             return;
         }
-        window.location.href = 'views/dashboard-home.html';
+
+        //Cambia la redireccion segun el dominio
+        const dominiosAdmin = ["@admin.cl", "@profesor.duoc.cl"];
+        const esAdmin = dominiosAdmin.some(dominio => email.endsWith(dominio));
+
+        if (esAdmin) {
+            // Redirige al Dashboard de para admins
+            window.location.href = 'views/dashboard-home.html'; 
+        } else {
+            // Redirige al dashboard normal de cliente
+            window.location.href = 'views/dashboard-user.html';
+        }
     });
 }
 

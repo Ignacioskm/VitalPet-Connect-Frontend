@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Servicios - VitalPet Connect</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+      <div class="container">
+        <!-- Icono hay que ver q ponemos aqui desps-->
+        <a
+          href="index.html"
+          class="navbar-brand d-flex align-items-center gap-2 text-primary fw-bold"
+        >
+          <i class="bi bi-heart-pulse-fill fs-4"></i>
+          VitalPet Connect
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
+            <li class="nav-item">
+              <a href="/index.html" class="nav-link text-secondary">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="/views/services.html"
+                class="nav-link active fw-bold text-primary"
+                aria-current="page"
+                >Servicios</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="/login.html" class="nav-link text-secondary">Iniciar sesión</a>
+            </li>
+          </ul>
+          <div class="d-flex gap-2">
+            <!--Aca va el boton del modal, que aun no se como carajos hacerlo-->
+            <button
+              class="btn btn-primary px-4 fw-medium"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#appointmentModal"
+            >
+              Agendar cita
+            </button>
+            <!-- Boton user que este lo hago altoque-->
+            <a class="btn btn-primary px-3" href="../login.html" role="button">
+              <i class="bi bi-person-fill"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <section class="container py-5" id="servicios">
+        <h2 class="fw-bold text-center mb-5 text-dark">Nuestros Servicios</h2>
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Consulta General
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Evaluación física completa para asegurar el bienestar óptimo de
+                  tu paciente. Incluye revisión de signos vitales, peso y
+                  asesoramiento preventivo.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$15.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/servicio-consulta-general.jpg"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Vacunación
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Esquema de inmunización estructurado (anual o para cachorros) diseñado para proteger a tu compañero contra las enfermedades virales y bacterianas más comunes.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$12.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/consulta-general-img.png"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Urgencia
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Atención médica inmediata y prioritaria para situaciones críticas. Contamos con el equipo necesario para estabilización rápida y manejo de dolor en momentos vitales.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$35.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/servicio-urgencia.jpg"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Cirugía Menor
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Procedimientos quirúrgicos ambulatorios de baja complejidad (como suturas o extirpación de bultos pequeños), realizados con anestesia segura y monitoreo constante.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$80.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/servicio-cirugia-menor.jpg"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Ecografía
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Diagnóstico por imagen rápido, seguro y no invasivo. Permite evaluar órganos internos en tiempo real, siendo ideal para seguimiento de gestación o detección de anomalías.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$30.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/servicio-ecografia.webp"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Examen de Sangre
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Análisis de laboratorio clínico preciso para evaluar el estado general de salud,revisar el funcionamiento de los órganos y detectar patologías de forma temprana.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$25.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/servicio-examen-sangre.webp"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4 custom-card-hover overflow-hidden">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-8">
+              <div class="card-body p-5">
+                <h3 class="card-title fw-bold text-primary mb-3">
+                  Peluquería Canina
+                </h3>
+                <p class="card-text text-secondary mb-4">
+                  Servicio Integral de estética e higiene. Incluye baño con productos especializados, corte de pelo según la raza, limpieza de oídos y recorte de uñas para su máxima comodidad.
+                </p>
+                <h4 class="text-success fw-bold mb-4">$20.000</h4>
+                <button class="btn btn-primary px-4 fw-medium" type="button" data-bs-toggle="modal"
+                        data-bs-target="#appointmentModal">
+                        Agendar cita
+                </button>
+              </div>
+            </div> 
+            <div class="col-md-4">
+              <img
+                src="/assets/images/servicio-peliqueria.jpg"
+                class="img-fluid rounded-end h-100 object-fit-cover"
+                alt="Consulta Veterinaria General"/>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <!-- Cabecera del Modal -->
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h1 class="modal-title fs-4 fw-bold text-dark" id="appointmentModalLabel">Agendar Nueva Cita</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-secondary small mb-4">Ingresa los datos de tu mascota para solicitar una hora de
+                        atención.</p>
+                    <form id="appointmentForm">
+                        <div class="mb-3">
+                            <label for="petName" class="form-label fw-medium small">Nombre de la Mascota</label>
+                            <input type="text" class="form-control" id="petName" placeholder="Ej: Nala">
+                            <span class="text-danger small" id="errorPetName"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ownerName" class="form-label fw-medium small">Tu Nombre</label>
+                            <input type="text" class="form-control" id="ownerName" placeholder="Ej: Ignacio">
+                            <span class="text-danger small" id="errorOwnerName"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="appointmentReason" class="form-label fw-medium small">Motivo de la
+                                Consulta</label>
+                            <select class="form-select" id="appointmentReason">
+                                <option value="" selected>Selecciona un motivo...</option>
+                                <option value="vacuna">Consulta General - $15.000</option>
+                                <option value="control">Vacunación - $12.000</option>
+                                <option value="urgencia">Urgencia - $35.000</option>
+                                <option value="cirugiaMenor">Cirugía Menor - $80.000</option>
+                                <option value="eco">Ecografía - $30.000</option>
+                                <option value="examenSangre"> Examen de Sangre - $25.000</option>
+                                <option value="peluqueria">Peluquería Canina - $20.000</option>
+                            </select>
+                            <span class="text-danger small" id="errorReason"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label for="appointmentTime" class="form-label fw-medium small">Horas Disponibles</label>
+                            <select class="form-select" id="appointmentTime">
+                                <option value="" selected>Cargando horas disponibles...</option>
+                                <!-- Las opciones reales se inyectarán aquí con tu mock-data.js -->
+                            </select>
+                            <span class="text-danger small" id="errorTime"></span>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary fw-medium py-2">Confirmar Cita</button>
+                            <button type="button" class="btn btn-light fw-medium py-2"
+                                data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

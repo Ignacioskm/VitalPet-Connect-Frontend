@@ -1,0 +1,206 @@
+/* estilos del panel de administracion
+   van despues de bootstrap, no lo reemplazan
+   uso los mismos colores que la landing (azul #0A58CA y fondo #F8F9F4) */
+
+/* variables de color para no andar repitiendo los codigos */
+:root {
+  --vp-azul: #0A58CA;
+  --vp-azul-oscuro: #084298;
+  --vp-azul-claro: #E7F1FF;
+  --vp-fondo: #F8F9F4;
+  --vp-borde: #E9ECEF;
+  --vp-texto: #212529;
+  --vp-gris: #6C757D;
+}
+
+body {
+  background-color: var(--vp-fondo);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--vp-texto);
+}
+
+/* menu lateral: blanco con sombra, como la navbar del sitio */
+.vp-sidebar {
+  background-color: #fff;
+  width: 240px;
+  min-height: 100vh;
+  padding: 20px 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-right: 1px solid var(--vp-borde);
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+
+.vp-sidebar .vp-logo {
+  color: var(--vp-azul);
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 25px;
+  text-decoration: none;
+}
+
+.vp-sidebar a.vp-link {
+  color: var(--vp-gris);
+  display: block;
+  padding: 10px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+
+.vp-sidebar a.vp-link:hover {
+  background-color: var(--vp-fondo);
+  color: var(--vp-azul);
+}
+
+/* la clase activo va en el link de la pagina donde estoy parado,
+   igual que el link activo de la navbar de la landing */
+.vp-sidebar a.vp-link.activo {
+  background-color: var(--vp-azul-claro);
+  color: var(--vp-azul);
+  font-weight: bold;
+}
+
+.vp-sidebar hr {
+  border-color: var(--vp-borde);
+  opacity: 1;
+}
+
+/* contenido */
+.vp-contenido {
+  margin-left: 240px;
+  padding: 25px 30px;
+}
+
+.vp-titulo {
+  color: var(--vp-texto);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.vp-subtitulo {
+  color: var(--vp-gris);
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+/* tarjetas del resumen */
+.vp-tarjeta {
+  background-color: #fff;
+  border: 1px solid var(--vp-borde);
+  border-radius: 10px;
+  padding: 18px;
+  height: 100%;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+
+.vp-tarjeta .vp-numero {
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--vp-azul);
+  margin: 0;
+}
+
+.vp-tarjeta .vp-etiqueta {
+  font-size: 13px;
+  color: var(--vp-gris);
+  text-transform: uppercase;
+}
+
+/* el circulito con el icono */
+.vp-icono {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+  background-color: var(--vp-azul);
+}
+
+.vp-icono.amarillo { background-color: #FFC107; }
+.vp-icono.rojo     { background-color: #DC3545; }
+.vp-icono.azul     { background-color: #6EA8FE; }
+
+/* cajas blancas de las tablas y los formularios */
+.vp-caja {
+  background-color: #fff;
+  border: 1px solid var(--vp-borde);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+
+.vp-caja h5 {
+  color: var(--vp-texto);
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.vp-tabla thead th {
+  background-color: var(--vp-azul-claro);
+  color: var(--vp-azul-oscuro);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.vp-tabla tbody tr:hover {
+  background-color: var(--vp-fondo);
+}
+
+/* boton propio, mismo azul que los botones de la landing */
+.btn-vp {
+  background-color: var(--vp-azul);
+  color: #fff;
+  border: none;
+}
+
+.btn-vp:hover {
+  background-color: var(--vp-azul-oscuro);
+  color: #fff;
+}
+
+/* mensajes de error de los formularios */
+.vp-error {
+  color: #DC3545;
+  font-size: 13px;
+  display: block;
+  margin-top: 4px;
+  min-height: 18px;
+}
+
+.vp-ayuda {
+  color: var(--vp-gris);
+  font-size: 12px;
+}
+
+/* borde rojo o verde segun la validacion */
+input.campo-malo, select.campo-malo, textarea.campo-malo {
+  border-color: #DC3545;
+}
+
+input.campo-bueno, select.campo-bueno, textarea.campo-bueno {
+  border-color: #198754;
+}
+
+/* en pantallas chicas el menu se va arriba */
+@media (max-width: 768px) {
+  .vp-sidebar {
+    position: static;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .vp-contenido {
+    margin-left: 0;
+    padding: 18px;
+  }
+}
